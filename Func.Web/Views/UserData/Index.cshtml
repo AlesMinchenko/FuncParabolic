@@ -1,0 +1,179 @@
+﻿@model Func.Web.Models.UserDataViewModel
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    @{
+        /**/
+
+        ViewBag.Title = "Home Page";
+        <script>
+            window.onload = function () {
+                var canvas = document.getElementsByTagName('canvas')[0];
+                var ctx = canvas.getContext("2d");
+
+                var sub1 = document.getElementById('sub');
+                var form = document.forms[0];
+                var x;
+                var y;
+
+                var grid = function () {
+                    ctx.fillStyle = "#ccc"; // цвет сетки
+                    for (var i = -canvas.width / 2; i < canvas.width; i += canvas.width)ctx.fillRect(i, 0, canvas.width, 1);
+                    for (var i = -canvas.height / 2; i < canvas.height; i += canvas.height)ctx.fillRect(0, i, 1, canvas.height);
+
+                }
+                var check = function (e) {
+                    if (e.charCode < 48 || e.charCode > 57) {
+                        if (e.charCode != 45 && e.charCode != 46) {
+                            alert('Введите число');
+                            return false;
+                        }
+                    }
+                }
+
+                var a = document.getElementsByName('A')[0];
+                a.onkeypress = check;
+
+                var b = document.getElementsByName('B')[0];
+                b.onkeypress = check;
+
+                var c = document.getElementsByName('C')[0];
+                c.onkeypress = check;
+
+                ctx.save();
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+
+                grid();//Оси ординат
+
+                var RangeFrom = document.getElementsByName('RangeFrom')[0];
+                RangeFrom.onkeypress = check;
+
+                var RangeTo = document.getElementsByName('RangeTo')[0];
+                RangeTo.onkeypress = check;
+
+                var Step = document.getElementsByName('Step')[0];
+                Step.onkeypress = check;
+
+                    ctx.clearRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
+                    grid();//Оси ординат
+
+
+                    x = -(@Model.B) / 2 * @Model.A;
+                    y = @Model.A * Math.pow(x, 2) + @Model.B * x + @Model.C;
+
+
+                    for (var i = @Model.RangeFrom; i < @Model.RangeTo; i += @Model.Step) {
+                        ctx.fillStyle = "blue"; // цвет квадратической параболы
+                        if (@Model.A < 0) {//проверка направления ветвей
+                            ctx.fillRect(x + (i * @Model.A), -(y - Math.pow(i, 2)), 1, 1);
+                        }
+                        else {
+                            ctx.fillRect(x + (i * @Model.A), (y - Math.pow(i, 2)), 1, 1);
+
+                        }
+                    }
+
+
+
+                form.onsubmit = function () {
+                    //ctx.clearRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
+
+                    //RangeFrom = parseInt(document.getElementsByName('RangeFrom')[0].value);
+                    //RangeTo = parseInt(document.getElementsByName('RangeTo')[0].value);
+                    //a = parseInt(document.getElementsByName('A')[0].value);
+                    //b = parseInt(document.getElementsByName('B')[0].value);
+                    //c = parseInt(document.getElementsByName('C')[0].value);
+                    //step = parseFloat(document.getElementsByName('Step')[0].value);
+
+                    //x = -(b) / 2 * a;
+                    //y = a * Math.pow(x, 2) + b * x + c;
+
+                    //grid();//Оси ординат
+
+                    //for (var i = RangeFrom; i < RangeTo; i += step) {
+                    //    ctx.fillStyle = "blue"; // цвет квадратической параболы
+                    //    if (a < 0) {//проверка направления ветвей
+                    //        ctx.fillRect(x + (i * a), -(y - Math.pow(i, 2)), 1, 1);
+                    //    }
+                    //    else {
+                    //        ctx.fillRect(x + (i * a), (y - Math.pow(i, 2)), 1, 1);
+
+                    //    }
+                    //}
+
+                    ctx.clearRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
+                    grid();//Оси ординат
+
+
+                    x = -(@Model.B) / 2 * @Model.A;
+                    y = @Model.A * Math.pow(x, 2) + @Model.B * x + @Model.C;
+
+
+                    for (var i = @Model.RangeFrom; i < @Model.RangeTo; i += @Model.Step) {
+                        ctx.fillStyle = "blue"; // цвет квадратической параболы
+                        if (@Model.A < 0) {//проверка направления ветвей
+                            ctx.fillRect(x + (i * @Model.A), -(y - Math.pow(i, 2)), 1, 1);
+                        }
+                        else {
+                            ctx.fillRect(x + (i * @Model.A), (y - Math.pow(i, 2)), 1, 1);
+
+                        }
+                    }
+
+                }
+            }
+        </script>
+    }
+</head>
+<body>
+
+    <div style="float:left">
+        <canvas id=canvas width="400" height="400" style="background:white; border: solid 1px;"></canvas>
+    </div>
+
+    <form method="post" action="/UserData/Index">
+        <div style="border: 2px solid; float: left; margin:7px; width: 300px; height: 100px">
+            <div style="margin:5px;">
+                Function: y = <input name="A" style="width:30px; height:20px" type="text" autofocus required />x^2
+                +<input name="B" style="width:30px; height:20px" type="text" autofocus required />x
+                +<input name="C" style="width:30px; height:20px" type="text" autofocus required />
+            </div>
+            <div style="margin:5px;">
+                Step: <input name="Step" style="width:30px; height:20px" type="text" autofocus required />
+            </div>
+            <div style="margin:5px;">
+                From: <input name="RangeFrom" style="width:30px; height:20px" type="text" autofocus required /> to
+                <input name="RangeTo" style="width:30px; height:20px" type="text" autofocus required />
+            </div>
+
+            <input style="margin-top:25px" class="btn btn-primary btn-block" id="sub" type="submit" value="Plot" />
+        </div>
+    </form>
+    @*Emmit*@
+    @*<div >
+            @if () { блок сохранения переписать на партиал вью
+                @Html.Partial();
+            }
+        </div>*@
+
+    <form method="post" action="/UserData/Save">
+
+        <div style="display:@ViewBag.Block">
+            @*переписать без формы на событие javascript*@
+            <input name="Name" type="text" placeholder="Имя графика" />
+            <input type="submit" value="save" class="btn btn-primary btn-block" />
+        </div>
+
+    </form>
+
+
+    <div style="clear:both">
+        <p style="color: red;" id="inform">@ViewBag.Message</p>
+    </div>
+    <div style="clear:both; color:red">
+        <p>@Html.ValidationSummary()</p>
+    </div>
+</body>
+</html>

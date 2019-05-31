@@ -1,0 +1,63 @@
+﻿@model Func.Web.Models.UserDataViewModel
+@{
+    ViewBag.Title = "База графиков";
+}
+
+<h2>Сохраненные графики</h2>
+
+<script>
+    window.onload = function () {
+            var canvas = document.getElementsByTagName('canvas')[0];
+        var ctx = canvas.getContext("2d");
+
+        ctx.save();
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+
+
+        var grid = function () {
+            ctx.fillStyle = "#ccc"; // цвет сетки
+            for (var i = -canvas.width / 2; i < canvas.width; i += canvas.width)ctx.fillRect(i, 0, canvas.width, 1);
+            for (var i = -canvas.height / 2; i < canvas.height; i += canvas.height)ctx.fillRect(0, i, 1, canvas.height);
+
+        }
+            ctx.clearRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
+            grid();//Оси ординат
+
+            x = -(@Model.B) / 2 * @Model.A;
+            y = @Model.A * Math.pow(x, 2) + @Model.B * x + @Model.C;
+
+            for (var i = @Model.RangeFrom; i < @Model.RangeTo; i += @Model.Step) {
+                ctx.fillStyle = "blue"; // цвет квадратической параболы
+
+                if (@Model.A < 0) {//проверка направления ветвей
+                    ctx.fillRect(x + (i * @Model.A), -(y - Math.pow(i, 2)), 1, 1)
+                }
+                else {
+                    ctx.fillRect(x + (i * @Model.A), (y - Math.pow(i, 2)), 1, 1);
+
+                }
+            }
+    }
+
+</script>
+
+<body>
+    <div style="float:left">
+        <canvas id=canvas width="400" height="400" style="background:white; border: solid 1px;"></canvas>
+    </div>
+    <div>
+        <p style="color: red; font-size:22px">@ViewBag.message</p>
+    </div>
+    <div style=" float:left">
+        @using (Html.BeginForm())
+        {
+            <div class="form-group">
+                <div style="width: 200px" class="col-md-offset-2 col-md-10">
+                    @Html.DropDownList("G", null, "-Выбрать график-", htmlAttributes: new { @class = "form-control" })
+                    <input type="submit" value="Показать" class="btn btn-default" />
+                </div>
+            </div>
+        }
+    </div>
+
+</body>

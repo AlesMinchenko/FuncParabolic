@@ -18,6 +18,7 @@ namespace Func.Web.Controllers
         {
             funcService = func;
         }
+        #region Default Function
         private UserDataViewModel UserData()
         {
             UserDataViewModel data = new UserDataViewModel
@@ -31,6 +32,7 @@ namespace Func.Web.Controllers
             };
             return data;
         }
+        #endregion
         public ActionResult Index()
         {
             //IEnumerable<UserDataDTO> userDtos = funcService.GetUserDatas();

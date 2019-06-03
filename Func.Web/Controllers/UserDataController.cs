@@ -2,6 +2,7 @@
 using Func.BLL.DTO;
 using Func.BLL.Interfaces;
 using Func.Web.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,6 +75,38 @@ namespace Func.Web.Controllers
                         var mapper = new MapperConfiguration(cfg => cfg.CreateMap<UserDataViewModel, UserDataDTO>()).CreateMapper();
                         var _chart = mapper.Map<UserDataViewModel, UserDataDTO>(data);
                         funcService.Create(_chart);
+
+                        int count = (-data.RangeFrom) + (data.RangeTo);
+                        string[] arrx = new string[count];
+                        string[] arry = new string[count];
+                        int ii = 0;
+                        var x = -(data.B) / 2 * data.A;
+                        var y = data.A * Math.Pow(x, 2) + data.B * x + data.C;
+                        for (decimal i = data.RangeFrom; i < data.RangeTo; i += data.Step)
+                        {
+                            if (data.A < 0)
+                            {//проверка направления ветвей
+                                arrx[ii] = (x + (i * data.A)).ToString() + " ";
+                                arry[ii] = ((y - Math.Pow((double)i, 2))).ToString() + " ";
+                                ii++;
+                            }
+                            else
+                            {
+                                arrx[ii] = (x + (i * data.A)).ToString() + " ";
+                                arry[ii] = (-(y - Math.Pow((double)i, 2))).ToString() + " ";
+                                ii++;
+                            }
+                        }
+                        if (data.A < 0)
+                        {
+                            Array.Reverse(arrx);
+                        }
+
+                        string dataY = JsonConvert.SerializeObject(arrx, Formatting.None);
+                        ViewBag.DataY = new HtmlString(dataY);
+
+                        string dataX = JsonConvert.SerializeObject(arry, Formatting.None);
+                        ViewBag.DataX = new HtmlString(dataX);
                         return View(data);
                     }
                 }
@@ -115,6 +148,38 @@ namespace Func.Web.Controllers
                 var _userData = funcService.GetUserData(_chart.UserData.Id);
                 var _mapper = new MapperConfiguration(cfg => cfg.CreateMap<UserDataDTO, UserDataViewModel>()).CreateMapper();
                 userData = _mapper.Map<UserDataDTO, UserDataViewModel>(_userData);
+
+                int count = (-userData.RangeFrom) + (userData.RangeTo);
+                string[] arrx = new string[count];
+                string[] arry = new string[count];
+                int ii = 0;
+                var x = -(userData.B) / 2 * userData.A;
+                var y = userData.A * Math.Pow(x, 2) + userData.B * x + userData.C;
+                for (decimal i = userData.RangeFrom; i < userData.RangeTo; i += userData.Step)
+                {
+                    if (userData.A < 0)
+                    {//проверка направления ветвей
+                        arrx[ii] = (x + (i * userData.A)).ToString() + " ";
+                        arry[ii] = ((y - Math.Pow((double)i, 2))).ToString() + " ";
+                        ii++;
+                    }
+                    else
+                    {
+                        arrx[ii] = (x + (i * userData.A)).ToString() + " ";
+                        arry[ii] = (-(y - Math.Pow((double)i, 2))).ToString() + " ";
+                        ii++;
+                    }
+                }
+                if (userData.A < 0)
+                {
+                    Array.Reverse(arrx);
+                }
+
+                string dataY = JsonConvert.SerializeObject(arrx, Formatting.None);
+                ViewBag.DataY = new HtmlString(dataY);
+
+                string dataX = JsonConvert.SerializeObject(arry, Formatting.None);
+                ViewBag.DataX = new HtmlString(dataX);
             }
             catch (Exception p)
             {

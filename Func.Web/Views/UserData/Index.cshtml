@@ -5,25 +5,16 @@
     <meta charset="utf-8" />
     <title></title>
     @{
-        /**/
 
         ViewBag.Title = "Home Page";
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
+
         <script>
             window.onload = function () {
                 var canvas = document.getElementsByTagName('canvas')[0];
                 var ctx = canvas.getContext("2d");
-
-                var sub1 = document.getElementById('sub');
                 var form = document.forms[0];
-                var x;
-                var y;
 
-                var grid = function () {
-                    ctx.fillStyle = "#ccc"; // цвет сетки
-                    for (var i = -canvas.width / 2; i < canvas.width; i += canvas.width)ctx.fillRect(i, 0, canvas.width, 1);
-                    for (var i = -canvas.height / 2; i < canvas.height; i += canvas.height)ctx.fillRect(0, i, 1, canvas.height);
-
-                }
                 var check = function (e) {
                     if (e.charCode < 48 || e.charCode > 57) {
                         if (e.charCode != 45 && e.charCode != 46) {
@@ -43,9 +34,6 @@
                 c.onkeypress = check;
 
                 ctx.save();
-                ctx.translate(canvas.width / 2, canvas.height / 2);
-
-                grid();//Оси ординат
 
                 var RangeFrom = document.getElementsByName('RangeFrom')[0];
                 RangeFrom.onkeypress = check;
@@ -56,71 +44,32 @@
                 var Step = document.getElementsByName('Step')[0];
                 Step.onkeypress = check;
 
-                    ctx.clearRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
-                    grid();//Оси ординат
+                ctx.clearRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
+                var dataY = JSON.parse('@ViewBag.DataY');
+                var dataX = JSON.parse('@ViewBag.DataX');
 
-
-                    x = -(@Model.B) / 2 * @Model.A;
-                    y = @Model.A * Math.pow(x, 2) + @Model.B * x + @Model.C;
-
-
-                    for (var i = @Model.RangeFrom; i < @Model.RangeTo; i += @Model.Step) {
-                        ctx.fillStyle = "blue"; // цвет квадратической параболы
-                        if (@Model.A < 0) {//проверка направления ветвей
-                            ctx.fillRect(x + (i * @Model.A), -(y - Math.pow(i, 2)), 1, 1);
-                        }
-                        else {
-                            ctx.fillRect(x + (i * @Model.A), (y - Math.pow(i, 2)), 1, 1);
-
-                        }
-                    }
-
-
+                var speedData = {
+                    labels: dataY,
+                    datasets: [{
+                        label: "Parabolic Function",
+                        data: dataX,
+                        fill: false,
+                        borderColor: 'red',
+                        pointBorderColor: 'black',
+                        pointBackgroundColor: 'rgba(255,150,0,0.5)',
+                        pointRadius: 2,
+                        pointHoverRadius: 10,
+                        pointHitRadius: 30,
+                        pointBorderWidth: 2,
+                        pointStyle: 'rectRounded'
+                    }]
+                };
+                var lineChart = new Chart(ctx, {
+                    type: 'line',
+                    data: speedData
+                });
 
                 form.onsubmit = function () {
-                    //ctx.clearRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
-
-                    //RangeFrom = parseInt(document.getElementsByName('RangeFrom')[0].value);
-                    //RangeTo = parseInt(document.getElementsByName('RangeTo')[0].value);
-                    //a = parseInt(document.getElementsByName('A')[0].value);
-                    //b = parseInt(document.getElementsByName('B')[0].value);
-                    //c = parseInt(document.getElementsByName('C')[0].value);
-                    //step = parseFloat(document.getElementsByName('Step')[0].value);
-
-                    //x = -(b) / 2 * a;
-                    //y = a * Math.pow(x, 2) + b * x + c;
-
-                    //grid();//Оси ординат
-
-                    //for (var i = RangeFrom; i < RangeTo; i += step) {
-                    //    ctx.fillStyle = "blue"; // цвет квадратической параболы
-                    //    if (a < 0) {//проверка направления ветвей
-                    //        ctx.fillRect(x + (i * a), -(y - Math.pow(i, 2)), 1, 1);
-                    //    }
-                    //    else {
-                    //        ctx.fillRect(x + (i * a), (y - Math.pow(i, 2)), 1, 1);
-
-                    //    }
-                    //}
-
-                    ctx.clearRect(-canvas.width / 2, -canvas.height / 2, canvas.width, canvas.height);
-                    grid();//Оси ординат
-
-
-                    x = -(@Model.B) / 2 * @Model.A;
-                    y = @Model.A * Math.pow(x, 2) + @Model.B * x + @Model.C;
-
-
-                    for (var i = @Model.RangeFrom; i < @Model.RangeTo; i += @Model.Step) {
-                        ctx.fillStyle = "blue"; // цвет квадратической параболы
-                        if (@Model.A < 0) {//проверка направления ветвей
-                            ctx.fillRect(x + (i * @Model.A), -(y - Math.pow(i, 2)), 1, 1);
-                        }
-                        else {
-                            ctx.fillRect(x + (i * @Model.A), (y - Math.pow(i, 2)), 1, 1);
-
-                        }
-                    }
 
                 }
             }

@@ -9,7 +9,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-
 namespace Func.Web.Controllers
 {
     public class UserDataController : Controller
@@ -36,15 +35,17 @@ namespace Func.Web.Controllers
         #endregion
         public ActionResult Index()
         {
+            ViewBag.MessageForTest = "MessageForTest";
             //IEnumerable<UserDataDTO> userDtos = funcService.GetUserDatas();
             //var mapper = new MapperConfiguration(cfg => cfg.CreateMap<UserDataDTO, UserDataViewModel>()).CreateMapper();
             //var _userDtos = mapper.Map<IEnumerable<UserDataDTO>, List<UserDataViewModel>>(userDtos);
             ViewBag.Block = "none";
-            return View(UserData());
+            return View("Index", UserData());
         }
         [HttpPost]
         public ActionResult Index(UserDataViewModel data)
         {
+            ViewBag.MessageForTest = "MessageForTest";
             try
             {
                 if (ModelState.IsValid)
@@ -118,7 +119,7 @@ namespace Func.Web.Controllers
                 ViewBag.Block = "none";
             }
 
-            return View(data);
+            return View("Index", data);
         }
 
         [HttpGet]

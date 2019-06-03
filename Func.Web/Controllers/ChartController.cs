@@ -45,7 +45,6 @@ namespace Func.Web.Controllers
             return View(chartDtos);
         }
 
-        // GET: Classes/Create
         public ActionResult Create()
         {
             return View();

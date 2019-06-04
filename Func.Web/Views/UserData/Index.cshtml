@@ -68,10 +68,6 @@
                     type: 'line',
                     data: speedData
                 });
-
-                form.onsubmit = function () {
-
-                }
             }
         </script>
     }
@@ -81,43 +77,28 @@
     <div style="float:left">
         <canvas id=canvas width="400" height="400" style="background:white; border: solid 1px;"></canvas>
     </div>
-
-    <form method="post" action="/UserData/Index">
-        <div style="border: 2px solid; float: left; margin:7px; width: 300px; height: 100px">
-            <div style="margin:5px;">
-                Function: y = <input name="A" style="width:30px; height:20px" type="text" autofocus required />x^2
-                +<input name="B" style="width:30px; height:20px" type="text" autofocus required />x
-                +<input name="C" style="width:30px; height:20px" type="text" autofocus required />
+    <div style="float:left">
+        <form method="post" action="/UserData/Index">
+            <div style="border: 2px solid; margin:7px; width: 300px; height: 100px">
+                <div style="margin:5px;">
+                    Function: y = <input name="A" style="width:30px; height:20px" type="text" autofocus required />x^2
+                    +<input name="B" style="width:30px; height:20px" type="text" autofocus required />x
+                    +<input name="C" style="width:30px; height:20px" type="text" autofocus required />
+                </div>
+                <div style="margin:5px;">
+                    Step: <input name="Step" style="width:30px; height:20px" type="text" autofocus required />
+                </div>
+                <div style="margin:5px;">
+                    From: <input name="RangeFrom" style="width:30px; height:20px" type="text" autofocus required /> to
+                    <input name="RangeTo" style="width:30px; height:20px" type="text" autofocus required />
+                </div>
+                <input style="margin-top:25px" class="btn btn-primary btn-block" id="sub" type="submit" value="Plot" />
+                <div style="padding:3px">
+                    @Html.Partial("PartialSaveFunction")
+                </div>
             </div>
-            <div style="margin:5px;">
-                Step: <input name="Step" style="width:30px; height:20px" type="text" autofocus required />
-            </div>
-            <div style="margin:5px;">
-                From: <input name="RangeFrom" style="width:30px; height:20px" type="text" autofocus required /> to
-                <input name="RangeTo" style="width:30px; height:20px" type="text" autofocus required />
-            </div>
-
-            <input style="margin-top:25px" class="btn btn-primary btn-block" id="sub" type="submit" value="Plot" />
-        </div>
-    </form>
-    @*Emmit*@
-    @*<div >
-            @if () { блок сохранения переписать на партиал вью
-                @Html.Partial();
-            }
-        </div>*@
-
-    <form method="post" action="/UserData/Save">
-
-        <div style="display:@ViewBag.Block">
-            @*переписать без формы на событие javascript*@
-            <input name="Name" type="text" placeholder="Имя графика" />
-            <input type="submit" value="save" class="btn btn-primary btn-block" />
-        </div>
-
-    </form>
-
-
+        </form>
+    </div>
     <div style="clear:both">
         <p style="color: red;" id="inform">@ViewBag.Message</p>
     </div>
